@@ -10,6 +10,9 @@
     </parent>
     <artifactId>jrobot-remote-server</artifactId>
     <packaging>bundle</packaging>
+    <properties>
+        <sonar.exclusions>**Exception.java**</sonar.exclusions>
+    </properties>
     <dependencies>
         <!--suppress NonOsgiMavenDependency-->
         <dependency>
