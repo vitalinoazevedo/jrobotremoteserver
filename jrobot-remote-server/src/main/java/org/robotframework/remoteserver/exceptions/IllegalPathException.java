@@ -1,4 +1,4 @@
-package org.robotframework.remoteserver.servlet;
+package org.robotframework.remoteserver.exceptions;
 
 /**
  * Thrown when a path is not valid for mapping to a library

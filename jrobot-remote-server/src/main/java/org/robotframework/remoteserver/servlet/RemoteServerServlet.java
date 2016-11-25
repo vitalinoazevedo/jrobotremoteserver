@@ -30,6 +30,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.XmlRpcHandlerMapping;
 import org.apache.xmlrpc.webserver.XmlRpcServlet;
 import org.apache.xmlrpc.webserver.XmlRpcServletServer;
+import org.robotframework.remoteserver.exceptions.IllegalPathException;
 import org.robotframework.remoteserver.library.RemoteLibrary;
 import org.robotframework.remoteserver.xmlrpc.ReflectiveHandlerMapping;
 import org.robotframework.remoteserver.xmlrpc.TypeFactory;
