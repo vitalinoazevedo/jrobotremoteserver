@@ -17,8 +17,7 @@ public class RemoteServerRequestProcessorFactoryFactoryTest {
     }
 
     @Test public void getRequestProcessorFactory() throws Exception {
-        //TODO
-        Assert.fail("Not tested");
+        Assert.assertNotNull(factory.getRequestProcessorFactory(Object.class));
     }
 
 }

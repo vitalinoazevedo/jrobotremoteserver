@@ -61,7 +61,7 @@ public class RemoteServerImpl implements RemoteServer {
      * it has not been opened, or -2 if it has been closed.
      */
     public int getPort() {
-        return connector.getLocalPort();
+        return connector.getPort();
     }
 
     /**

@@ -19,11 +19,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.regex.Pattern;
 import org.apache.ws.commons.util.Base64;
 import org.apache.ws.commons.util.Base64.Encoder;
-import org.apache.xmlrpc.serializer.TypeSerializerImpl;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-public class StringSerializer extends TypeSerializerImpl {
+/**
+ * A {@link org.apache.xmlrpc.serializer.TypeSerializer} for strings.
+ */
+public class StringSerializer extends org.apache.xmlrpc.serializer.StringSerializer {
 
     public static final String BASE_64_TAG = "base64";
     private static final Pattern pattern = Pattern.compile("[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]");
@@ -50,10 +52,10 @@ public class StringSerializer extends TypeSerializerImpl {
                 pHandler.endElement("", BASE_64_TAG, BASE_64_TAG);
                 pHandler.endElement("", VALUE_TAG, VALUE_TAG);
             } catch (UnsupportedEncodingException e1) {
-                // TODO log exception
+                throw new SAXException(e1);
             }
         } else {
-            write(pHandler, null, value);
+            super.write(pHandler, null, value);
         }
     }
 

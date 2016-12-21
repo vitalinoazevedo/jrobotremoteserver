@@ -87,8 +87,20 @@ public class CheckedKeywordImpl implements CheckedKeyword {
             return method.getAnnotation(ArgumentNames.class).value();
         }
         String[] names = new String[method.getParameterCount()];
-        for (int i = 0; i < method.getParameters().length; i++) {
-            names[i] = method.getParameters()[i].getName();
+        if (method.isAnnotationPresent(ArgumentNames.class)) {
+            final ArgumentNames argumentNames = method.getAnnotation(ArgumentNames.class);
+            if (argumentNames.value().length != names.length) {
+                throw new IllegalStateException(
+                        String.format("%s has invalid argument count than method %s [%d != %d]", argumentNames, method,
+                                argumentNames.value().length, names.length));
+            }
+            for (int i = 0; i < method.getParameters().length; i++) {
+                names[i] = argumentNames.value()[i];
+            }
+        } else {
+            for (int i = 0; i < method.getParameters().length; i++) {
+                names[i] = method.getParameters()[i].getName();
+            }
         }
         return names;
     }

@@ -47,11 +47,15 @@ import org.robotframework.remoteserver.keywords.OverloadedKeywordFactory;
     @Override public synchronized Object runKeyword(String keywordName, Object[] args, Map<String, Object> kwargs) {
         if (Objects.nonNull(kwargs) && !kwargs.isEmpty()) {
             String[] argsNames = getKeywordArguments(keywordName);
+            Object[] argsNew = new Object[argsNames.length];
             for (int i = 0; i < argsNames.length; i++) {
                 if (kwargs.containsKey(argsNames[i])) {
-                    args[i] = kwargs.get(argsNames[i]);
+                    argsNew[i] = kwargs.get(argsNames[i]);
+                } else if (i < args.length) {
+                    argsNew[i] = args[i];
                 }
             }
+            return runKeyword(keywordName, argsNew);
         }
         return runKeyword(keywordName, args);
     }

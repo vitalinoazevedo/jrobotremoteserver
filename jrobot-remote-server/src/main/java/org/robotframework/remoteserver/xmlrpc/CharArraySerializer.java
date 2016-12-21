@@ -14,15 +14,18 @@
  */
 package org.robotframework.remoteserver.xmlrpc;
 
-import org.apache.xmlrpc.parser.ByteArrayParser;
+import org.apache.xmlrpc.serializer.TypeSerializerImpl;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
- * A {@link org.apache.xmlrpc.serializer.TypeSerializer} for base64 elements that converts to String.
+ * A {@link org.apache.xmlrpc.serializer.TypeSerializer} for elements that converts to String.
  */
-public class ByteArrayToStringParser extends ByteArrayParser {
+public class CharArraySerializer extends TypeSerializerImpl {
 
     @Override
-    public void setResult(Object pResult) {
-        super.setResult(pResult instanceof byte[] ? new String((byte[]) pResult) : pResult);
+    public void write(ContentHandler pHandler, Object pObject) throws SAXException {
+        char[] chars = (char[]) pObject;
+        write(pHandler, null, chars);
     }
 }

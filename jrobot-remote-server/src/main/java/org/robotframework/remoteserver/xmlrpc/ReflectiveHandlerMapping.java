@@ -27,7 +27,7 @@ public class ReflectiveHandlerMapping extends AbstractReflectiveHandlerMapping {
      * Removes the prefixes from all keys in this handler mapping assuming a String was used as the key and period was
      * used as a separator. Example: AccountsReceivable.Billing.getInvoice getInvoice
      */
-    @SuppressWarnings("unchecked") public void removePrefixes() {
+    public void removePrefixes() {
         Map<String, Object> newHandlerMap = new HashMap<>();
         for (Entry<String, Object> entry : (Set<Entry<String, Object>>) this.handlerMap.entrySet()) {
             String newKey = entry.getKey();

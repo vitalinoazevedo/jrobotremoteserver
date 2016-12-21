@@ -30,10 +30,9 @@ import org.apache.xmlrpc.serializer.ByteArraySerializer;
 import org.apache.xmlrpc.serializer.DoubleSerializer;
 import org.apache.xmlrpc.serializer.I4Serializer;
 import org.apache.xmlrpc.serializer.ListSerializer;
+import org.apache.xmlrpc.serializer.MapSerializer;
 import org.apache.xmlrpc.serializer.ObjectArraySerializer;
 import org.apache.xmlrpc.serializer.TypeSerializer;
-import org.apache.xmlrpc.serializer.TypeSerializerImpl;
-import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
 public class TypeFactory extends TypeFactoryImpl {
@@ -42,19 +41,8 @@ public class TypeFactory extends TypeFactoryImpl {
     private static final TypeSerializer I4_SERIALIZER = new I4Serializer();
     private static final TypeSerializer DOUBLE_SERIALIZER = new DoubleSerializer();
     private static final TypeSerializer BOOLEAN_SERIALIZER = new BooleanSerializer();
-    private static final TypeSerializer NULL_SERIALIZER = new org.apache.xmlrpc.serializer.StringSerializer() {
-
-        @Override public void write(ContentHandler pHandler, Object pObject) throws SAXException {
-            write(pHandler, null, "");
-        }
-    };
-    private static final TypeSerializer CHAR_ARRAY_SERIALIZER = new TypeSerializerImpl() {
-
-        public void write(ContentHandler pHandler, Object pObject) throws SAXException {
-            char[] chars = (char[]) pObject;
-            write(pHandler, null, chars);
-        }
-    };
+    private static final TypeSerializer NULL_SERIALIZER = new NullSerializer();
+    private static final TypeSerializer CHAR_ARRAY_SERIALIZER = new CharArraySerializer();
     private static final TypeParser BYTE_ARRAY_PARSER = new ByteArrayToStringParser();
 
     public TypeFactory(XmlRpcController pController) {
@@ -118,33 +106,9 @@ public class TypeFactory extends TypeFactoryImpl {
             return new IterableSerializer(this, pConfig);
         else if (pObject instanceof char[])
             return CHAR_ARRAY_SERIALIZER;
-        else if (pObject.getClass().isArray()) {
-            return new ObjectArraySerializer(TypeFactory.this, pConfig) {
-
-                @Override protected void writeData(ContentHandler pHandler, Object pObject1) throws SAXException {
-                    Object[] array;
-                    if (pObject1 instanceof byte[])
-                        array = toObject((byte[]) pObject1);
-                    else if (pObject1 instanceof short[])
-                        array = toObject((short[]) pObject1);
-                    else if (pObject1 instanceof int[])
-                        array = toObject((int[]) pObject1);
-                    else if (pObject1 instanceof long[])
-                        array = toObject((long[]) pObject1);
-                    else if (pObject1 instanceof float[])
-                        array = toObject((float[]) pObject1);
-                    else if (pObject1 instanceof double[])
-                        array = toObject((double[]) pObject1);
-                    else if (pObject1 instanceof boolean[])
-                        array = toObject((boolean[]) pObject1);
-                    else
-                        // should never happen
-                        throw new SAXException(String.format("Array of type %s[] not handled!",
-                                pObject1.getClass().getComponentType().getName()));
-                    super.writeData(pHandler, array);
-                }
-            };
-        } else
+        else if (pObject.getClass().isArray())
+            return new PrimitiveArraySerializer(TypeFactory.this, pConfig);
+        else
             return STRING_SERIALIZER;
     }
 

@@ -117,7 +117,7 @@ public class ServerMethods implements JRobotServlet {
         Map<String, Object> kwargs = new HashMap<>();
         for (Object arg : Objects.requireNonNull(args)) {
             if (arg.toString().contains("=")) {
-                kwargs.put(arg.toString().split("=")[0] + "=", arg.toString().split("=")[1]);
+                kwargs.put(arg.toString().split("=")[0], arg.toString().split("=")[1]);
             }
         }
         return run_keyword(keyword, args, kwargs.isEmpty() ? Collections.emptyMap() : kwargs);
@@ -146,8 +146,7 @@ public class ServerMethods implements JRobotServlet {
         boolean flag = false;
         try {
             flag = thrown.getClass().getField(name).getBoolean(thrown);
-        } catch (Exception e) {
-            // ignore
+        } catch (Exception ignore) {
         }
         return flag;
     }

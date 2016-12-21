@@ -1,5 +1,6 @@
 package org.robotframework.remoteserver.xmlrpc;
 
+import java.util.Collections;
 import org.apache.ws.commons.util.NamespaceContextImpl;
 import org.apache.xmlrpc.common.XmlRpcController;
 import org.apache.xmlrpc.common.XmlRpcStreamConfig;
@@ -9,6 +10,9 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
 
+/**
+ * Tests for {@link TypeFactory}
+ */
 public class TypeFactoryTest {
 
     private XmlRpcStreamConfig pConfig;
@@ -57,15 +61,32 @@ public class TypeFactoryTest {
     }
 
     @Test public void getSerializer() throws Exception {
-        //TODO
-        typeFactory.getSerializer(pConfig, "");
-        Assert.fail("Not tested");
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, null));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, ""));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, 0));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, (short) 0));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, (byte) 0));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, false));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, 0d));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, 0f));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new Object[] {}));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, Collections.emptyList()));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, Collections.emptyMap()));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, Collections.emptyIterator()));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new char[] {}));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new byte[] {}));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new short[] {}));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new int[] {}));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new long[] {}));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new float[] {}));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new double[] {}));
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new boolean[] {}));
     }
 
     @Test public void getParser() throws Exception {
-        //TODO
-        typeFactory.getParser(pConfig, pContext, "", "");
-        Assert.fail("Not tested");
+        Assert.assertNotNull(typeFactory.getParser(pConfig, pContext, "", "base64"));
+        Assert.assertNotNull(typeFactory.getParser(pConfig, pContext, "", "double"));
+        Assert.assertNull(typeFactory.getParser(pConfig, pContext, "", null));
     }
 
 }
