@@ -2,6 +2,9 @@
 jrobotremoteserver
 ******************
 .. image:: https://travis-ci.org/aenniw/jrobotremoteserver.svg?branch=master
+.. image:: https://coveralls.io/repos/github/aenniw/jrobotremoteserver/badge.svg?branch=master
+:target: https://coveralls.io/github/aenniw/jrobotremoteserver?branch=master
+
 
 jrobotremoteserver is a `remote server <https://code.google.com/p/robotframework/wiki/RemoteLibrary>`_ for `Robot Framework <http://robotframework.googlecode.com/>`_ implemented in Java.
 
