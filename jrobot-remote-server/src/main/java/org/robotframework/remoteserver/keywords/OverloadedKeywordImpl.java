@@ -20,6 +20,7 @@ package org.robotframework.remoteserver.keywords;
 import com.google.common.collect.Iterables;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,8 @@ public class OverloadedKeywordImpl implements OverloadedKeyword {
                 if (checkedKeyword.canExecute(arguments))
                     return checkedKeyword.execute(arguments);
             }
+            throw new IllegalArgumentException(
+                    String.format("%s cannot be executed with args %s.", keywordName, Arrays.toString(arguments)));
         } else if (keywordMap.size() == 1) {
             throw new IllegalArgumentException(String.format("%s takes %d argument(s), received %d.", keywordName,
                     Iterables.get(keywordMap.keySet(), 0), argCount));

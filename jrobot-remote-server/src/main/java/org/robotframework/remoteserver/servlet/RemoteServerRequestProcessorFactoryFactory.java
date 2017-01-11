@@ -29,6 +29,7 @@ public class RemoteServerRequestProcessorFactoryFactory implements RequestProces
 
     @SuppressWarnings("rawtypes") public RequestProcessorFactory getRequestProcessorFactory(Class aClass)
             throws XmlRpcException {
+        //FIXME parameter is unused
         return factory;
     }
 

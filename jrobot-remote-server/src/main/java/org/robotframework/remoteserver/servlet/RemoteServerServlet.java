@@ -30,6 +30,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.XmlRpcHandlerMapping;
 import org.apache.xmlrpc.webserver.XmlRpcServlet;
 import org.apache.xmlrpc.webserver.XmlRpcServletServer;
+import org.robotframework.remoteserver.exceptions.IllegalPathException;
 import org.robotframework.remoteserver.library.RemoteLibrary;
 import org.robotframework.remoteserver.xmlrpc.ReflectiveHandlerMapping;
 import org.robotframework.remoteserver.xmlrpc.TypeFactory;
@@ -54,7 +55,7 @@ public class RemoteServerServlet extends XmlRpcServlet implements RemoteServerCo
      * @param path the path the client requested
      * @return cleaned up path
      */
-    private static String cleanPath(String path) {
+    protected static String cleanPath(String path) {
         if (path == null) {
             return "/";
         }
@@ -68,7 +69,7 @@ public class RemoteServerServlet extends XmlRpcServlet implements RemoteServerCo
         return path;
     }
 
-    private static String checkPath(String path) {
+    protected static String checkPath(String path) {
         if (path == null || !path.startsWith("/")) {
             throw new IllegalPathException(String.format("Path [%s] does not start with a /.", path));
         } else if (path.contains("//")) {
@@ -152,7 +153,7 @@ public class RemoteServerServlet extends XmlRpcServlet implements RemoteServerCo
         return request.get();
     }
 
-    private String getPage() {
+    protected String getPage() {
         Map<String, RemoteLibrary> map = new TreeMap<>(getLibraryMap());
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">"
