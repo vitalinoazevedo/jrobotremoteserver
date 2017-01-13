@@ -30,7 +30,7 @@ public interface RemoteLibrary extends KeywordDocumentationRepository, RobotJava
      *
      * @return The names of keywords in the library.
      */
-    String[] getKeywordNames();
+    @Override String[] getKeywordNames();
 
     /**
      * Executes the keyword with the given name. As some library implementations
@@ -50,7 +50,7 @@ public interface RemoteLibrary extends KeywordDocumentationRepository, RobotJava
      * @param keyword name of the keyword to get argument specifications for
      * @return array of argument specifications
      */
-    String[] getKeywordArguments(String keyword);
+    @Override String[] getKeywordArguments(String keyword);
 
     /**
      * Gets the documentation string for the given keyword name.
@@ -58,7 +58,7 @@ public interface RemoteLibrary extends KeywordDocumentationRepository, RobotJava
      * @param name name of the keyword to get documentation for
      * @return keyword documentation string
      */
-    String getKeywordDocumentation(String name);
+    @Override String getKeywordDocumentation(String name);
 
     /**
      * Gets the name of the remote library.

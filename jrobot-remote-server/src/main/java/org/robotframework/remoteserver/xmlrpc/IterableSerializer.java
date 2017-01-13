@@ -26,7 +26,7 @@ public class IterableSerializer extends ObjectArraySerializer {
         super(pTypeFactory, pConfig);
     }
 
-    protected void writeData(ContentHandler pHandler, Object pObject) throws SAXException {
+    @Override protected void writeData(ContentHandler pHandler, Object pObject) throws SAXException {
         Iterable<?> obj = (Iterable<?>) pObject;
         for (Object anObj : obj) {
             writeObject(pHandler, anObj);

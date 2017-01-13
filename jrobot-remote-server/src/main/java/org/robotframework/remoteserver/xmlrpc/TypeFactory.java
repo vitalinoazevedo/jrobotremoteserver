@@ -14,9 +14,13 @@
  */
 package org.robotframework.remoteserver.xmlrpc;
 
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -43,6 +47,7 @@ public class TypeFactory extends TypeFactoryImpl {
     private static final TypeSerializer BOOLEAN_SERIALIZER = new BooleanSerializer();
     private static final TypeSerializer NULL_SERIALIZER = new NullSerializer();
     private static final TypeSerializer CHAR_ARRAY_SERIALIZER = new CharArraySerializer();
+    private static final PojoSerializer POJO_SERIALIZER = new PojoSerializer();
     private static final TypeParser BYTE_ARRAY_PARSER = new ByteArrayToStringParser();
 
     public TypeFactory(XmlRpcController pController) {
@@ -85,8 +90,9 @@ public class TypeFactory extends TypeFactoryImpl {
         return bytes;
     }
 
+    @Override
     public TypeSerializer getSerializer(XmlRpcStreamConfig pConfig, Object pObject) throws SAXException {
-        if (pObject == null)
+        if (Objects.isNull(pObject))
             return NULL_SERIALIZER;
         else if (pObject instanceof String)
             return STRING_SERIALIZER;
@@ -109,7 +115,7 @@ public class TypeFactory extends TypeFactoryImpl {
         else if (pObject.getClass().isArray())
             return new PrimitiveArraySerializer(TypeFactory.this, pConfig);
         else
-            return STRING_SERIALIZER;
+            return POJO_SERIALIZER;
     }
 
     @Override public TypeParser getParser(XmlRpcStreamConfig pConfig, NamespaceContextImpl pContext, String pURI,
@@ -118,6 +124,17 @@ public class TypeFactory extends TypeFactoryImpl {
             return BYTE_ARRAY_PARSER;
         }
         return super.getParser(pConfig, pContext, pURI, pLocalName);
+    }
+
+    void addSerializer(Module module) {
+        synchronized (POJO_SERIALIZER) {
+            POJO_SERIALIZER.mapper.registerModule(Objects.requireNonNull(module));
+        }
+    }
+
+    public <T> void addSerializer(Class<T> tClass, JsonSerializer<T> jsonSerializer) {
+        addSerializer(new SimpleModule().addSerializer(Objects.requireNonNull(tClass),
+                Objects.requireNonNull(jsonSerializer)));
     }
 
 }

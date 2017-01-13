@@ -84,15 +84,15 @@ public class RemoteServerServlet extends XmlRpcServlet implements RemoteServerCo
         return path;
     }
 
-    public RemoteLibrary putLibrary(String path, RemoteLibrary library) {
+    @Override public RemoteLibrary putLibrary(String path, RemoteLibrary library) {
         return libraryMap.put(checkPath(path), Objects.requireNonNull(library));
     }
 
-    public RemoteLibrary removeLibrary(String path) {
+    @Override public RemoteLibrary removeLibrary(String path) {
         return libraryMap.remove(path);
     }
 
-    public Map<String, RemoteLibrary> getLibraryMap() {
+    @Override public Map<String, RemoteLibrary> getLibraryMap() {
         return Collections.unmodifiableMap(libraryMap);
     }
 
@@ -149,7 +149,7 @@ public class RemoteServerServlet extends XmlRpcServlet implements RemoteServerCo
         out.print(body);
     }
 
-    public HttpServletRequest getRequest() {
+    @Override public HttpServletRequest getRequest() {
         return request.get();
     }
 

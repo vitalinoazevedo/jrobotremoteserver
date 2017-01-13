@@ -60,4 +60,6 @@ public interface RemoteServer {
      */
     void putLibrary(String path, RemoteLibrary library);
 
+    void addSerializer();
+
 }

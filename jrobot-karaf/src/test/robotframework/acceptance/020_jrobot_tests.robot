@@ -57,6 +57,28 @@ Library Inheritance Test
     ${pi}    ExtendedLib.Get Pi
     Should be equal as numbers    3.14    ${pi}
 
+Library Testing WIP
+    [Documentation]
+    ${resp}    ExtendedLib.Get Object
+    Log   ${resp}
+
+    ${resp}    ExtendedLib.Get Array Ints
+    Log   ${resp}
+    ${resp}    ExtendedLib.Get Array Chars
+    Log   ${resp}
+
+    ${resp}    ExtendedLib.Get List Integers
+    Log   ${resp}
+    ${resp}    ExtendedLib.Get List Strings
+    Log   ${resp}
+    ${resp}    ExtendedLib.Get Set Integers
+    Log   ${resp}
+    ${resp}    ExtendedLib.Get Set Strings
+    Log   ${resp}
+
+    ${resp}    ExtendedLib.Get Map
+    Log   ${resp}
+
 *** Keywords ***
 Setup Suite
     [Documentation]    Initialize Suite resources
