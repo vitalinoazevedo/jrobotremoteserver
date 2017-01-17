@@ -14,6 +14,7 @@
  */
 package org.robotframework.remoteserver;
 
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.util.Map;
 import java.util.Objects;
 import org.eclipse.jetty.server.Connector;
@@ -24,6 +25,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.robotframework.remoteserver.library.RemoteLibrary;
 import org.robotframework.remoteserver.servlet.RemoteServerContext;
 import org.robotframework.remoteserver.servlet.RemoteServerServlet;
+import org.robotframework.remoteserver.xmlrpc.TypeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,5 +138,9 @@ public class RemoteServerImpl implements RemoteServer {
         LOG.info("Robot Framework remote server starting");
         server.start();
         LOG.info("Robot Framework remote server started on port {}", getPort());
+    }
+
+    @Override public <T> void addSerializer(StdSerializer<T> serializer) {
+        ((TypeFactory) servlet.getXmlRpcServletServer().getTypeFactory()).addSerializer(serializer);
     }
 }

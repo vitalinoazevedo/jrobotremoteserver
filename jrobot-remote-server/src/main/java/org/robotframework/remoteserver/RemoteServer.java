@@ -1,5 +1,6 @@
 package org.robotframework.remoteserver;
 
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.util.Map;
 import org.robotframework.remoteserver.library.RemoteLibrary;
 
@@ -60,6 +61,10 @@ public interface RemoteServer {
      */
     void putLibrary(String path, RemoteLibrary library);
 
-    void addSerializer();
+    /**
+     * @param serializer Instance of {@link StdSerializer} that will be responsible for serialization
+     * @param <T>        Type that will be serialized
+     */
+    <T> void addSerializer(StdSerializer<T> serializer);
 
 }

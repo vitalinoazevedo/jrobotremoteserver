@@ -11,9 +11,11 @@
     <bean id="test-library-arguments" class="org.robotframework.test.ArgumentsLibrary">
         <argument ref="robot-remote-server"/>
     </bean>
-    <!-- Services -->
-    <service ref="test-library" interface="org.robotframework.test.TestLibraryService"/>
-    <service ref="test-library-arguments" interface="org.robotframework.remoteserver.library.RemoteLibrary"/>
-    <service ref="test-library-parent" interface="org.robotframework.remoteserver.library.RemoteLibrary"/>
+    <bean id="test-library-collections" class="org.robotframework.test.CollectionsLibrary">
+        <argument ref="robot-remote-server"/>
+    </bean>
+    <bean id="test-library-serializers" class="org.robotframework.test.SerializersLibrary">
+        <argument ref="robot-remote-server"/>
+    </bean>
 </blueprint>
 

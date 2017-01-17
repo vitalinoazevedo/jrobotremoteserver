@@ -17,6 +17,7 @@ package org.robotframework.remoteserver.servlet;
 import java.util.Map;
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.xmlrpc.webserver.XmlRpcServletServer;
 import org.robotframework.remoteserver.library.RemoteLibrary;
 
 public interface RemoteServerContext extends Servlet {
@@ -64,5 +65,12 @@ public interface RemoteServerContext extends Servlet {
      * was no mapping for the path.
      */
     RemoteLibrary removeLibrary(String path);
+
+    /**
+     * Returns the servlets instance of {@link XmlRpcServletServer}.
+     *
+     * @return The configurable instance of {@link XmlRpcServletServer}.
+     */
+    XmlRpcServletServer getXmlRpcServletServer();
 
 }

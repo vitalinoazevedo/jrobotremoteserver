@@ -1,10 +1,11 @@
-package org.robotframework.remoteserver.xmlrpc;
+package org.robotframework.remoteserver.xmlrpc.serializers;
 
 import org.apache.xmlrpc.common.XmlRpcStreamConfig;
 import org.apache.xmlrpc.serializer.TypeSerializer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.robotframework.remoteserver.xmlrpc.TypeFactory;
 import org.xml.sax.ContentHandler;
 
 /**

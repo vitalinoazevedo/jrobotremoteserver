@@ -2,6 +2,7 @@
 Documentation     Test suite to verify functionality of jrobot-remoe-server
 Suite Setup       Setup Suite
 Suite Teardown    Clean Suite
+Library           Collections
 Resource          ../karaf_keywords.robot
 
 *** Variables ***
@@ -57,27 +58,44 @@ Library Inheritance Test
     ${pi}    ExtendedLib.Get Pi
     Should be equal as numbers    3.14    ${pi}
 
-Library Testing WIP
-    [Documentation]
-    ${resp}    ExtendedLib.Get Object
-    Log   ${resp}
+Library Collection Serialization
+    [Documentation]    Tests if Collections like Lists, Arrays, Sets and Maps are recieved corectly
+    ${resp}    CollectionsLib.Get Array Ints
+    Should Be Equal As Strings    ${resp}    [41, 42, 43, 44, 45]
+    ${resp}    CollectionsLib.Get Array Chars
+    Should Be Equal As Strings    ${resp}    abcd
+    ${resp}    CollectionsLib.Get List Integers
+    Should Be Equal As Strings    ${resp}    [1, 2, 3, 4]
+    ${resp}    CollectionsLib.Get List Strings
+    Should Be Equal As Strings    ${resp}    ['1', '2', '3', '4']
+    ${resp}    CollectionsLib.Get Set Integers
+    Should Be Equal As Strings    ${resp}    [1, 2, 3, 4]
+    ${resp}    CollectionsLib.Get Set Strings
+    Should Be Equal As Strings    ${resp}    ['1', '2', '3', '4']
+    ${resp}    CollectionsLib.Get Map
+    Should Be Equal As Strings    ${resp}    {'5': 'five', '6': 'six', '10': 'ten'}
 
-    ${resp}    ExtendedLib.Get Array Ints
-    Log   ${resp}
-    ${resp}    ExtendedLib.Get Array Chars
-    Log   ${resp}
+Library POJO And Custom Serialization
+    [Documentation]    Tests if Classes with custom serializers are recieved corectly
+    ${resp}    SerializersLib.Get Dummy Object
+    Should Be Equal As Strings    ${resp}    Dummy Object
 
-    ${resp}    ExtendedLib.Get List Integers
-    Log   ${resp}
-    ${resp}    ExtendedLib.Get List Strings
-    Log   ${resp}
-    ${resp}    ExtendedLib.Get Set Integers
-    Log   ${resp}
-    ${resp}    ExtendedLib.Get Set Strings
-    Log   ${resp}
+    ${resp}    SerializersLib.Get Pojo Object    1    2    POJO Object
+    ${content}    Evaluate    json.loads('''${resp}''')    json
+    ${name}    Get From Dictionary    ${content}    name
+    ${x}    Get From Dictionary    ${content}    x
+    ${y}    Get From Dictionary    ${content}    y
+    Should Be Equal As Strings    ${name}    POJO Object
+    Should Be Equal As Numbers    ${x}    1
+    Should Be Equal As Numbers    ${y}    2
 
-    ${resp}    ExtendedLib.Get Map
-    Log   ${resp}
+    ${resp}    SerializersLib.Get Test Object    1    2    Test Object
+    ${content}    Evaluate    json.loads('''${resp}''')    json
+    ${name}    Get From Dictionary    ${content}    name
+    ${coordinates}    Get From Dictionary    ${content}    coordinates
+    Should Be Equal As Strings    ${name}    Test Object
+    List Should Contain Value    ${coordinates}    1
+    List Should Contain Value    ${coordinates}    2
 
 *** Keywords ***
 Setup Suite
@@ -92,6 +110,8 @@ Setup Suite
     Import Library    Remote    http://localhost:8270/BaseLibrary    WITH NAME    BaseLib
     Import Library    Remote    http://localhost:8270/ExtendedLibrary    WITH NAME    ExtendedLib
     Import Library    Remote    http://localhost:8270/ArgumentsLibrary    WITH NAME    ArgumentsLib
+    Import Library    Remote    http://localhost:8270/CollectionsLibrary    WITH NAME    CollectionsLib
+    Import Library    Remote    http://localhost:8270/SerializersLibrary    WITH NAME    SerializersLib
 
 Clean Suite
     [Documentation]    Cleans Suites resources

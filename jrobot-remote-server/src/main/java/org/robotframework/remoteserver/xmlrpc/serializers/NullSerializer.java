@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.robotframework.remoteserver.xmlrpc;
+package org.robotframework.remoteserver.xmlrpc.serializers;
 
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -22,8 +22,7 @@ import org.xml.sax.SAXException;
  */
 public class NullSerializer extends StringSerializer {
 
-    @Override
-    public void write(ContentHandler pHandler, Object pObject) throws SAXException {
+    @Override public void write(ContentHandler pHandler, Object pObject) throws SAXException {
         write(pHandler, null, "");
     }
 }

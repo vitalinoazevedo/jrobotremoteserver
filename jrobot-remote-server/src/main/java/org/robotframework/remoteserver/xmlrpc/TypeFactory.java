@@ -15,8 +15,8 @@
 package org.robotframework.remoteserver.xmlrpc;
 
 import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +37,13 @@ import org.apache.xmlrpc.serializer.ListSerializer;
 import org.apache.xmlrpc.serializer.MapSerializer;
 import org.apache.xmlrpc.serializer.ObjectArraySerializer;
 import org.apache.xmlrpc.serializer.TypeSerializer;
+import org.robotframework.remoteserver.xmlrpc.serializers.AbstractSerializer;
+import org.robotframework.remoteserver.xmlrpc.serializers.CharArraySerializer;
+import org.robotframework.remoteserver.xmlrpc.serializers.IterableSerializer;
+import org.robotframework.remoteserver.xmlrpc.serializers.NullSerializer;
+import org.robotframework.remoteserver.xmlrpc.serializers.PojoSerializer;
+import org.robotframework.remoteserver.xmlrpc.serializers.PrimitiveArraySerializer;
+import org.robotframework.remoteserver.xmlrpc.serializers.StringSerializer;
 import org.xml.sax.SAXException;
 
 public class TypeFactory extends TypeFactoryImpl {
@@ -47,8 +54,9 @@ public class TypeFactory extends TypeFactoryImpl {
     private static final TypeSerializer BOOLEAN_SERIALIZER = new BooleanSerializer();
     private static final TypeSerializer NULL_SERIALIZER = new NullSerializer();
     private static final TypeSerializer CHAR_ARRAY_SERIALIZER = new CharArraySerializer();
-    private static final PojoSerializer POJO_SERIALIZER = new PojoSerializer();
+    private static final TypeSerializer POJO_SERIALIZER = new PojoSerializer();
     private static final TypeParser BYTE_ARRAY_PARSER = new ByteArrayToStringParser();
+    private final List<AbstractSerializer<?>> serializers = new ArrayList<>();
 
     public TypeFactory(XmlRpcController pController) {
         super(pController);
@@ -90,8 +98,7 @@ public class TypeFactory extends TypeFactoryImpl {
         return bytes;
     }
 
-    @Override
-    public TypeSerializer getSerializer(XmlRpcStreamConfig pConfig, Object pObject) throws SAXException {
+    @Override public TypeSerializer getSerializer(XmlRpcStreamConfig pConfig, Object pObject) throws SAXException {
         if (Objects.isNull(pObject))
             return NULL_SERIALIZER;
         else if (pObject instanceof String)
@@ -114,8 +121,12 @@ public class TypeFactory extends TypeFactoryImpl {
             return CHAR_ARRAY_SERIALIZER;
         else if (pObject.getClass().isArray())
             return new PrimitiveArraySerializer(TypeFactory.this, pConfig);
-        else
-            return POJO_SERIALIZER;
+        for (AbstractSerializer<?> serializer : serializers) {
+            if (serializer.canSerialize(pObject.getClass())) {
+                return serializer;
+            }
+        }
+        return POJO_SERIALIZER;
     }
 
     @Override public TypeParser getParser(XmlRpcStreamConfig pConfig, NamespaceContextImpl pContext, String pURI,
@@ -126,15 +137,14 @@ public class TypeFactory extends TypeFactoryImpl {
         return super.getParser(pConfig, pContext, pURI, pLocalName);
     }
 
-    void addSerializer(Module module) {
-        synchronized (POJO_SERIALIZER) {
-            POJO_SERIALIZER.mapper.registerModule(Objects.requireNonNull(module));
-        }
-    }
+    public <T> void addSerializer(final StdSerializer<T> serializer) {
+        Objects.requireNonNull(serializer);
+        serializers.add(new AbstractSerializer<T>() {
 
-    public <T> void addSerializer(Class<T> tClass, JsonSerializer<T> jsonSerializer) {
-        addSerializer(new SimpleModule().addSerializer(Objects.requireNonNull(tClass),
-                Objects.requireNonNull(jsonSerializer)));
+            @Override protected JsonSerializer<T> getSerializer() {
+                return serializer;
+            }
+        });
     }
 
 }
