@@ -8,10 +8,10 @@ language: java
 jdk:
   - oraclejdk8
 script:
-  - if (git branch | grep -s "* master");then
-      mvn install -DcoverallToken=${COV_TOKEN} jacoco:report coveralls:report
+  - if (git branch | grep -s "* master"); then
+      mvn install -DcoverallToken=${COV_TOKEN} jacoco:report coveralls:report;
     else
-      mvn install
+      mvn install;
     fi
 before_deploy:
   - mvn javadoc:jar
