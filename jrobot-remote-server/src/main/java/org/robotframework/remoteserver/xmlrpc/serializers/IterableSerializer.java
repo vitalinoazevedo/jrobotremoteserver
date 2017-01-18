@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.robotframework.remoteserver.xmlrpc;
+package org.robotframework.remoteserver.xmlrpc.serializers;
 
 import org.apache.xmlrpc.common.TypeFactory;
 import org.apache.xmlrpc.common.XmlRpcStreamConfig;
@@ -26,7 +26,7 @@ public class IterableSerializer extends ObjectArraySerializer {
         super(pTypeFactory, pConfig);
     }
 
-    protected void writeData(ContentHandler pHandler, Object pObject) throws SAXException {
+    @Override protected void writeData(ContentHandler pHandler, Object pObject) throws SAXException {
         Iterable<?> obj = (Iterable<?>) pObject;
         for (Object anObj : obj) {
             writeObject(pHandler, anObj);

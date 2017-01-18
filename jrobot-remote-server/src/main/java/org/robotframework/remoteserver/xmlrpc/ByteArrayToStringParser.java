@@ -21,8 +21,7 @@ import org.apache.xmlrpc.parser.ByteArrayParser;
  */
 public class ByteArrayToStringParser extends ByteArrayParser {
 
-    @Override
-    public void setResult(Object pResult) {
+    @Override public void setResult(Object pResult) {
         super.setResult(pResult instanceof byte[] ? new String((byte[]) pResult) : pResult);
     }
 }

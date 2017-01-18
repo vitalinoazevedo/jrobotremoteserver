@@ -27,7 +27,7 @@ public class RemoteServerRequestProcessorFactoryFactory implements RequestProces
         this.serverMethods = new ServerMethods(servlet);
     }
 
-    @SuppressWarnings("rawtypes") public RequestProcessorFactory getRequestProcessorFactory(Class aClass)
+    @Override @SuppressWarnings("rawtypes") public RequestProcessorFactory getRequestProcessorFactory(Class aClass)
             throws XmlRpcException {
         //FIXME parameter is unused
         return factory;
@@ -35,7 +35,7 @@ public class RemoteServerRequestProcessorFactoryFactory implements RequestProces
 
     private class RemoteServerRequestProcessorFactory implements RequestProcessorFactory {
 
-        public JRobotServlet getRequestProcessor(XmlRpcRequest xmlRpcRequest) throws XmlRpcException {
+        @Override public JRobotServlet getRequestProcessor(XmlRpcRequest xmlRpcRequest) throws XmlRpcException {
             return serverMethods;
         }
     }

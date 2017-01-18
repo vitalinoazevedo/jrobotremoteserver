@@ -1,5 +1,9 @@
 package org.robotframework.remoteserver.xmlrpc;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import java.io.IOException;
 import java.util.Collections;
 import org.apache.ws.commons.util.NamespaceContextImpl;
 import org.apache.xmlrpc.common.XmlRpcController;
@@ -15,6 +19,13 @@ import static org.mockito.Mockito.mock;
  */
 public class TypeFactoryTest {
 
+    private final StdSerializer<TestObject> serializer = new StdSerializer<TestObject>(TestObject.class) {
+
+        @Override public void serialize(TestObject value, JsonGenerator jgen, SerializerProvider provider)
+                throws IOException {
+
+        }
+    };
     private XmlRpcStreamConfig pConfig;
     private NamespaceContextImpl pContext;
     private TypeFactory typeFactory;
@@ -81,6 +92,11 @@ public class TypeFactoryTest {
         Assert.assertNotNull(typeFactory.getSerializer(pConfig, new float[] {}));
         Assert.assertNotNull(typeFactory.getSerializer(pConfig, new double[] {}));
         Assert.assertNotNull(typeFactory.getSerializer(pConfig, new boolean[] {}));
+
+        typeFactory.addSerializer(serializer);
+        Assert.assertNotNull(typeFactory.getSerializer(pConfig, new TestObject()));
+        Assert.assertNotEquals(typeFactory.getSerializer(pConfig, new TestObject()),
+                typeFactory.getSerializer(pConfig, new Object()));
     }
 
     @Test public void getParser() throws Exception {
@@ -89,4 +105,10 @@ public class TypeFactoryTest {
         Assert.assertNull(typeFactory.getParser(pConfig, pContext, "", null));
     }
 
+    private class TestObject {
+
+        @Override public String toString() {
+            return "TestObject";
+        }
+    }
 }

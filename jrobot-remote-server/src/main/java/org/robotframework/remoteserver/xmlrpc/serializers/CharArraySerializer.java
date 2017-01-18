@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.robotframework.remoteserver.xmlrpc;
+package org.robotframework.remoteserver.xmlrpc.serializers;
 
 import org.apache.xmlrpc.serializer.TypeSerializerImpl;
 import org.xml.sax.ContentHandler;
@@ -23,8 +23,7 @@ import org.xml.sax.SAXException;
  */
 public class CharArraySerializer extends TypeSerializerImpl {
 
-    @Override
-    public void write(ContentHandler pHandler, Object pObject) throws SAXException {
+    @Override public void write(ContentHandler pHandler, Object pObject) throws SAXException {
         char[] chars = (char[]) pObject;
         write(pHandler, null, chars);
     }

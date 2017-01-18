@@ -12,14 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.robotframework.remoteserver.xmlrpc;
-
-import static org.robotframework.remoteserver.xmlrpc.TypeFactory.toObject;
+package org.robotframework.remoteserver.xmlrpc.serializers;
 
 import org.apache.xmlrpc.common.XmlRpcStreamConfig;
 import org.apache.xmlrpc.serializer.ObjectArraySerializer;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
+
+import static org.robotframework.remoteserver.xmlrpc.TypeFactory.toObject;
 
 /**
  * A {@link org.apache.xmlrpc.serializer.TypeSerializer} for primitive array elements.
@@ -36,8 +36,7 @@ public class PrimitiveArraySerializer extends ObjectArraySerializer {
         super(pTypeFactory, pConfig);
     }
 
-    @Override
-    protected void writeData(ContentHandler pHandler, Object pObject1) throws SAXException {
+    @Override protected void writeData(ContentHandler pHandler, Object pObject1) throws SAXException {
         Object[] array = new Object[0];
         if (pObject1 instanceof byte[])
             array = toObject((byte[]) pObject1);

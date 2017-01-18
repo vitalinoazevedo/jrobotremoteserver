@@ -1,4 +1,4 @@
-package org.robotframework.remoteserver.xmlrpc;
+package org.robotframework.remoteserver.xmlrpc.serializers;
 
 import org.apache.xmlrpc.serializer.TypeSerializerImpl;
 import org.junit.Before;

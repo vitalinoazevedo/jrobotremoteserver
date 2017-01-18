@@ -2,6 +2,7 @@
 Documentation     Test suite to verify functionality of jrobot-remoe-server
 Suite Setup       Setup Suite
 Suite Teardown    Clean Suite
+Library           Collections
 Resource          ../karaf_keywords.robot
 
 *** Variables ***
@@ -31,9 +32,9 @@ Library Numeric Type KWARGS Test
     Should be equal as numbers    3.9    ${sum}
     ${sum}    BaseLib.Sub    b=5.2    a=1.3
     Should be equal as numbers    -3.9    ${sum}
-    ${sum}    BaseLib.Sub    b=5   a=1
+    ${sum}    BaseLib.Sub    b=5    a=1
     Should Be Equal As Integers    -4    ${sum}
-    ${sum}    BaseLib.Sub    5   b=1
+    ${sum}    BaseLib.Sub    5    b=1
     Should Be Equal As Integers    4    ${sum}
 
 Library Numeric Type KWARGS Override Test
@@ -42,9 +43,9 @@ Library Numeric Type KWARGS Override Test
     Should be equal as numbers    3.9    ${sum}
     ${sum}    ArgumentsLib.Sub    element_2=5.2    element_1=1.3
     Should be equal as numbers    -3.9    ${sum}
-    ${sum}    ArgumentsLib.Sub    element_2=5   element_1=1
+    ${sum}    ArgumentsLib.Sub    element_2=5    element_1=1
     Should Be Equal As Integers    -4    ${sum}
-    ${sum}    ArgumentsLib.Sub    5   element_2=1
+    ${sum}    ArgumentsLib.Sub    5    element_2=1
     Should Be Equal As Integers    4    ${sum}
 
 Library Inheritance Test
@@ -56,6 +57,45 @@ Library Inheritance Test
     Should Be Equal As Strings    ${name_2}    Extended Library
     ${pi}    ExtendedLib.Get Pi
     Should be equal as numbers    3.14    ${pi}
+
+Library Collection Serialization
+    [Documentation]    Tests if Collections like Lists, Arrays, Sets and Maps are recieved corectly
+    ${resp}    CollectionsLib.Get Array Ints
+    Should Be Equal As Strings    ${resp}    [41, 42, 43, 44, 45]
+    ${resp}    CollectionsLib.Get Array Chars
+    Should Be Equal As Strings    ${resp}    abcd
+    ${resp}    CollectionsLib.Get List Integers
+    Should Be Equal As Strings    ${resp}    [1, 2, 3, 4]
+    ${resp}    CollectionsLib.Get List Strings
+    Should Be Equal As Strings    ${resp}    ['1', '2', '3', '4']
+    ${resp}    CollectionsLib.Get Set Integers
+    Should Be Equal As Strings    ${resp}    [1, 2, 3, 4]
+    ${resp}    CollectionsLib.Get Set Strings
+    Should Be Equal As Strings    ${resp}    ['1', '2', '3', '4']
+    ${resp}    CollectionsLib.Get Map
+    Should Be Equal As Strings    ${resp}    {'5': 'five', '6': 'six', '10': 'ten'}
+
+Library POJO And Custom Serialization
+    [Documentation]    Tests if Classes with custom serializers are recieved corectly
+    ${resp}    SerializersLib.Get Dummy Object
+    Should Be Equal As Strings    ${resp}    Dummy Object
+
+    ${resp}    SerializersLib.Get Pojo Object    1    2    POJO Object
+    ${content}    Evaluate    json.loads('''${resp}''')    json
+    ${name}    Get From Dictionary    ${content}    name
+    ${x}    Get From Dictionary    ${content}    x
+    ${y}    Get From Dictionary    ${content}    y
+    Should Be Equal As Strings    ${name}    POJO Object
+    Should Be Equal As Numbers    ${x}    1
+    Should Be Equal As Numbers    ${y}    2
+
+    ${resp}    SerializersLib.Get Test Object    1    2    Test Object
+    ${content}    Evaluate    json.loads('''${resp}''')    json
+    ${name}    Get From Dictionary    ${content}    name
+    ${coordinates}    Get From Dictionary    ${content}    coordinates
+    Should Be Equal As Strings    ${name}    Test Object
+    List Should Contain Value    ${coordinates}    1
+    List Should Contain Value    ${coordinates}    2
 
 *** Keywords ***
 Setup Suite
@@ -70,6 +110,8 @@ Setup Suite
     Import Library    Remote    http://localhost:8270/BaseLibrary    WITH NAME    BaseLib
     Import Library    Remote    http://localhost:8270/ExtendedLibrary    WITH NAME    ExtendedLib
     Import Library    Remote    http://localhost:8270/ArgumentsLibrary    WITH NAME    ArgumentsLib
+    Import Library    Remote    http://localhost:8270/CollectionsLibrary    WITH NAME    CollectionsLib
+    Import Library    Remote    http://localhost:8270/SerializersLibrary    WITH NAME    SerializersLib
 
 Clean Suite
     [Documentation]    Cleans Suites resources

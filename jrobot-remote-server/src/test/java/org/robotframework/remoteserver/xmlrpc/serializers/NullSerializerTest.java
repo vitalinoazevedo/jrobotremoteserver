@@ -1,4 +1,4 @@
-package org.robotframework.remoteserver.xmlrpc;
+package org.robotframework.remoteserver.xmlrpc.serializers;
 
 import org.apache.xmlrpc.serializer.TypeSerializerImpl;
 import org.junit.Before;
@@ -7,25 +7,26 @@ import org.mockito.Mockito;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 
-public class CharArraySerializerTest {
+/**
+ * Tests for {@link NullSerializer}
+ */
+public class NullSerializerTest {
 
-    private CharArraySerializer serializer;
-    private ContentHandler contentHandler;
+    private NullSerializer serializer;
+    private ContentHandler handler;
 
     @Before public void setUp() throws Exception {
-        serializer = new CharArraySerializer();
-        contentHandler = Mockito.mock(ContentHandler.class);
+        serializer = new NullSerializer();
+        handler = Mockito.mock(ContentHandler.class);
     }
 
     @Test public void write() throws Exception {
-        final String message = "test input";
-        serializer.write(contentHandler, message.toCharArray());
-        Mockito.verify(contentHandler)
+        serializer.write(handler, null);
+        Mockito.verify(handler)
                 .startElement(Mockito.anyString(), Mockito.eq(TypeSerializerImpl.VALUE_TAG),
                         Mockito.eq(TypeSerializerImpl.VALUE_TAG), Mockito.any(Attributes.class));
-        Mockito.verify(contentHandler)
-                .characters(Mockito.eq(message.toCharArray()), Mockito.eq(0), Mockito.eq(message.length()));
-        Mockito.verify(contentHandler)
+        Mockito.verify(handler).characters(Mockito.eq("".toCharArray()), Mockito.eq(0), Mockito.eq(0));
+        Mockito.verify(handler)
                 .endElement(Mockito.anyString(), Mockito.eq(TypeSerializerImpl.VALUE_TAG),
                         Mockito.eq(TypeSerializerImpl.VALUE_TAG));
     }

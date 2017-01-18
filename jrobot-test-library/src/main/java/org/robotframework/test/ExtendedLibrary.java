@@ -21,5 +21,4 @@ import org.robotframework.remoteserver.RemoteServer;
     @RobotKeyword public double getPi() {
         return 3.14;
     }
-
 }
