@@ -32,9 +32,9 @@ Library Numeric Type KWARGS Test
     Should be equal as numbers    3.9    ${sum}
     ${sum}    BaseLib.Sub    b=5.2    a=1.3
     Should be equal as numbers    -3.9    ${sum}
-    ${sum}    BaseLib.Sub    b=5   a=1
+    ${sum}    BaseLib.Sub    b=5    a=1
     Should Be Equal As Integers    -4    ${sum}
-    ${sum}    BaseLib.Sub    5   b=1
+    ${sum}    BaseLib.Sub    5    b=1
     Should Be Equal As Integers    4    ${sum}
 
 Library Numeric Type KWARGS Override Test
@@ -43,9 +43,9 @@ Library Numeric Type KWARGS Override Test
     Should be equal as numbers    3.9    ${sum}
     ${sum}    ArgumentsLib.Sub    element_2=5.2    element_1=1.3
     Should be equal as numbers    -3.9    ${sum}
-    ${sum}    ArgumentsLib.Sub    element_2=5   element_1=1
+    ${sum}    ArgumentsLib.Sub    element_2=5    element_1=1
     Should Be Equal As Integers    -4    ${sum}
-    ${sum}    ArgumentsLib.Sub    5   element_2=1
+    ${sum}    ArgumentsLib.Sub    5    element_2=1
     Should Be Equal As Integers    4    ${sum}
 
 Library Inheritance Test
