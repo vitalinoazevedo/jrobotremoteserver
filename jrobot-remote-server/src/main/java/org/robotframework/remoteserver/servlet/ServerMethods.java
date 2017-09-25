@@ -122,7 +122,9 @@ public class ServerMethods implements JRobotServlet {
         Map<String, Object> kwargs = new HashMap<>();
         for (Object arg : Objects.requireNonNull(args)) {
             if (arg.toString().contains("=")) {
-                kwargs.put(arg.toString().split("=")[0], arg.toString().split("=")[1]);
+                if(arg.toString().split("=").length > 1){    
+                    kwargs.put(arg.toString().split("=")[0], arg.toString().split("=")[1]);
+                }    
             }
         }
         return run_keyword(keyword, args, kwargs.isEmpty() ? Collections.emptyMap() : kwargs);
